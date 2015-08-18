@@ -27,6 +27,11 @@ socket.on('connect', function() {
 
 		var leds = new j5.Led(6);
 
+		var servo = new j5.Servo({
+			pin: 10,
+			range: [0,165]
+		});
+
 		function forward() {
 			motorRight.start(255);
 			motorLeft.start(255);
@@ -74,7 +79,13 @@ socket.on('connect', function() {
 		});
 
 		socket.on('robot:arm', function(data) {
-
+			console.log(data);
+			if(servo.value === 0) {
+				servo.max();
+			}
+			else {
+				servo.min();
+			}
 		});
 
 		board.repl.inject({
@@ -85,7 +96,8 @@ socket.on('connect', function() {
 			turnLeft: turnLeft,
 			turnRight: turnRight,
 			stop: stop,
-			led: leds
+			led: leds,
+			servo: servo
 		});
 	});
 

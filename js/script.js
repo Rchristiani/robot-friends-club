@@ -1,5 +1,6 @@
 'use strict'
-var socket = io('http://localhost:4557');
+var url = window.location.hostname;
+var socket = io(("http://" + url + ":4557"));
 
 var Header = React.createClass({displayName: "Header",
 	getInitialState: function() {
@@ -9,7 +10,6 @@ var Header = React.createClass({displayName: "Header",
 	},
 	componentDidMount: function() {
 		socket.on('connectedUser', function(data)  {
-			console.log(data);
 			this.setState({
 				connected: data
 			});
@@ -46,10 +46,10 @@ var CommandPrompt = React.createClass({displayName: "CommandPrompt",
 		}.bind(this));
 	},
 	enterCommand: function(e) {
-		e.preventDefault();
+		e.preventDefault();	
 		socket.emit('direction', {direction: this.state.command});
 		var userCommands = this.state.userCommands;
-		userCommands.unshift(("$~friend: " + this.state.command));
+		userCommands.push(("$~friend: " + this.state.command));
 		this.setState({
 			command: '',
 			userCommands: userCommands

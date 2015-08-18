@@ -19,9 +19,6 @@ io.on('connection', function(socket) {
 		console.log(data);
 		io.emit('robot:direction',data.direction);
 	});
-	socket.on('arm', function(data) {
-		io.emit('robot:arm', data.operation);
-	});
 	socket.on('disconnect', function() {
 		console.log('disconnect');
 		connectedUsers -= 1;
