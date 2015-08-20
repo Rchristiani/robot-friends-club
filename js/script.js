@@ -47,13 +47,19 @@ var CommandPrompt = React.createClass({displayName: "CommandPrompt",
 	},
 	enterCommand: function(e) {
 		e.preventDefault();	
-		socket.emit('direction', {direction: this.state.command});
+		var pattern = /left|right|forward/;
 		var userCommands = this.state.userCommands;
-		userCommands.push(("$~friend: " + this.state.command));
-		this.setState({
-			command: '',
-			userCommands: userCommands
-		});
+		if(this.state.command.match(pattern)) {
+			socket.emit('direction', {direction: this.state.command});
+			userCommands.push(("$~friend: " + this.state.command));
+		}
+		else {
+			userCommands.push(("$~friend: " + this.state.command + " command not found"));
+		}
+			this.setState({
+				command: '',
+				userCommands: userCommands
+			});
 	},
 	onChange: function(e) {
 		this.setState({
