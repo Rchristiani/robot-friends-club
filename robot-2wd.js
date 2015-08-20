@@ -5,7 +5,7 @@ var socketIO = require('socket.io');
 var http = require('http');
 
 socketIO.listen('4556');
-var socket = io.connect('http://localhost:4557');
+var socket = io.connect('http://robotfriends.club:4557');
 socket.on('connect', function() {
 
 	board.on('ready', function() {
@@ -32,6 +32,8 @@ socket.on('connect', function() {
 			range: [0,165]
 		});
 
+		var dataArray = [];
+
 		function forward() {
 			motorRight.start(255);
 			motorLeft.start(255);
@@ -53,40 +55,42 @@ socket.on('connect', function() {
 		}
 
 		socket.on('robot:direction', function(data) {
-			leds.on();
-			if(data === 'forward') {
-				forward();
-				board.wait(1000, function() {
-					stop();
-				});
-			}
-			else if(data === 'right') {
-				turnRight();
-				board.wait(500, function() {
-					stop();
-				});
-			}
-			else if(data === 'left') {
-				turnLeft();
-				board.wait(500, function() {
-					stop();
-				});
-			}
-			else {
-				stop();
-			}
-			
+			dataArray.push(data);
 		});
 
-		socket.on('robot:arm', function(data) {
-			console.log(data);
-			if(servo.value === 0) {
-				servo.max();
-			}
-			else {
-				servo.min();
-			}
-		});
+		//if the length is greater than 0
+		//loop
+		//
+		function runLoop() {
+			setInterval(function() {
+				if(dataArray.length > 0) {
+					var item = dataArray.shift();
+					leds.on();
+					if(item === 'forward') {
+						forward();
+						board.wait(1000, function() {
+							stop();
+						});
+					}
+					else if(item === 'right') {
+						turnRight();
+						board.wait(500, function() {
+							stop();
+						});
+					}
+					else if(item === 'left') {
+						turnLeft();
+						board.wait(500, function() {
+							stop();
+						});
+					}
+					else {
+						stop();
+					}
+				}
+			}, 1000);
+		}
+		runLoop();
 
 		board.repl.inject({
 			motorRight: motorRight,
@@ -96,8 +100,7 @@ socket.on('connect', function() {
 			turnLeft: turnLeft,
 			turnRight: turnRight,
 			stop: stop,
-			led: leds,
-			servo: servo
+			led: leds
 		});
 	});
 

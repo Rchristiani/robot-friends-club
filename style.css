@@ -53,6 +53,7 @@ h1 {
 	font-family: monospace;
 	font-size: 18px;
 	padding: 15px;
+	overflow: hidden;
 }
 .prompt ul {
 	padding: 0;
