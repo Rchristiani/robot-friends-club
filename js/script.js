@@ -5,7 +5,8 @@ var socket = io(("http://" + url + ":4557"));
 var Header = React.createClass({displayName: "Header",
 	getInitialState: function() {
 		return {
-			connected: 0
+			connected: 0,
+			modalClass: ''
 		}
 	},
 	componentDidMount: function() {
@@ -15,6 +16,9 @@ var Header = React.createClass({displayName: "Header",
 			});
 		}.bind(this));
 	},
+	showInfo: function() {
+
+	},
 	render: function() {
 		return(
 			React.createElement("header", null, 
@@ -22,7 +26,10 @@ var Header = React.createClass({displayName: "Header",
 					React.createElement("img", {src: "robot.svg"}), 
 					React.createElement("h1", null, "Robot Friends Club")
 				), 
-				React.createElement("span", null, "Connected users: ", this.state.connected)
+
+				React.createElement("span", null, 
+					"Connected users: ", this.state.connected
+				)
 			)
 		);
 	}
@@ -101,6 +108,16 @@ var CommandPrompt = React.createClass({displayName: "CommandPrompt",
 	}
 });
 
+var Modal = React.createClass({displayName: "Modal",
+	render: function() {
+		return (
+			React.createElement("div", {className: "modal"}, 
+				"INFO"
+			)
+		)
+	}
+});
+
 var ListItem = React.createClass({displayName: "ListItem",
 	render: function() {
 		return React.createElement("li", null, this.props.command)
@@ -112,7 +129,8 @@ var App = React.createClass({displayName: "App",
 		return (
 			React.createElement("div", null, 
 				React.createElement(Header, null), 
-				React.createElement(CommandPrompt, null)
+				React.createElement(CommandPrompt, null), 
+				React.createElement(Modal, null)
 			)
 		);
 	}	

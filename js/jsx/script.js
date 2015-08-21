@@ -5,7 +5,8 @@ var socket = io(`http://${url}:4557`);
 var Header = React.createClass({
 	getInitialState: function() {
 		return {
-			connected: 0
+			connected: 0,
+			modalClass: ''
 		}
 	},
 	componentDidMount: function() {
@@ -15,6 +16,9 @@ var Header = React.createClass({
 			});
 		});
 	},
+	showInfo: function() {
+
+	},
 	render: function() {
 		return(
 			<header>
@@ -22,7 +26,10 @@ var Header = React.createClass({
 					<img src="robot.svg" />
 					<h1>Robot Friends Club</h1>
 				</div>
-				<span>Connected users: {this.state.connected}</span>
+
+				<span>
+					Connected users: {this.state.connected}
+				</span>
 			</header>
 		);
 	}
@@ -101,6 +108,16 @@ var CommandPrompt = React.createClass({
 	}
 });
 
+var Modal = React.createClass({
+	render: function() {
+		return (
+			<div className="modal">
+				INFO
+			</div>
+		)
+	}
+});
+
 var ListItem = React.createClass({
 	render: function() {
 		return <li>{this.props.command}</li>
@@ -113,6 +130,7 @@ var App = React.createClass({
 			<div>
 				<Header />
 				<CommandPrompt />
+				<Modal />
 			</div>
 		);
 	}	

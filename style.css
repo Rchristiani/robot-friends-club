@@ -75,6 +75,7 @@ h1 {
 	background: transparent;
 	border: none;
 	color: white;
+	border-bottom: 1px dotted rgba(255,255,255,0.5);
 }
 .prompt-icon {
 	padding-right: 5px;
