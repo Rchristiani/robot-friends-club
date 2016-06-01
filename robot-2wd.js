@@ -9,49 +9,57 @@ var socket = io.connect('http://robotfriends.club:4557');
 socket.on('connect', function() {
 
 	board.on('ready', function() {
-		var connectionLed = j5.Led(4);
-		connectionLed.on();
-		socket.on('disconnect', function() {
-			connectionLed.off();
-		});
-		socket.on('connect', function() {
-			connectionLed.on();
-		});
+		// var connectionLed = j5.Led(4);
+		// connectionLed.on();
+		// socket.on('disconnect', function() {
+		// 	connectionLed.off();
+		// });
+		// socket.on('connect', function() {
+		// 	connectionLed.on();
+		// });
 		var motorRight = new j5.Motor({
-			pin: 5 
+			pins: {
+				pwm: 5,
+				dir: 4
+			},
+			invertPWM: true
 		});
 
 		var motorLeft = new j5.Motor({
-			pin: 3
+			pins: {
+				pwm: 3,
+				dir: 2
+			},
+			invertPWM: true
 		});
 
-		var leds = new j5.Led(6);
+		// var leds = new j5.Led(6);
 
-		var servo = new j5.Servo({
-			pin: 10,
-			range: [0,165]
-		});
+		// var servo = new j5.Servo({
+		// 	pin: 10,
+		// 	range: [0,165]
+		// });
 
 		var dataArray = [];
 
 		function forward() {
-			motorRight.start(255);
-			motorLeft.start(255);
+			motorRight.forward(255);
+			motorLeft.forward(255);
 		} 
 		function stop() {
 			motorRight.stop();
 			motorLeft.stop();
-			leds.off();
+			// leds.off();
 		}
 		function reverse() {
-			motorLeft.reverse();
-			motorRight.reverse();
+			motorLeft.reverse(255);
+			motorRight.reverse(255);
 		}
 		function turnLeft() {
-			motorLeft.start();
+			motorLeft.forward(255);
 		}
 		function turnRight() {
-			motorRight.start();
+			motorRight.forward(255);
 		}
 
 		socket.on('robot:direction', function(data) {
@@ -65,7 +73,7 @@ socket.on('connect', function() {
 			setInterval(function() {
 				if(dataArray.length > 0) {
 					var item = dataArray.shift();
-					leds.on();
+					// leds.on();
 					if(item === 'forward') {
 						forward();
 						board.wait(1000, function() {
@@ -80,6 +88,12 @@ socket.on('connect', function() {
 					}
 					else if(item === 'left') {
 						turnLeft();
+						board.wait(500, function() {
+							stop();
+						});
+					}
+					else if(item === 'reverse') {
+						reverse();
 						board.wait(500, function() {
 							stop();
 						});
@@ -100,7 +114,7 @@ socket.on('connect', function() {
 			turnLeft: turnLeft,
 			turnRight: turnRight,
 			stop: stop,
-			led: leds
+			// led: leds
 		});
 	});
 

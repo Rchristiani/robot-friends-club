@@ -54,7 +54,7 @@ var CommandPrompt = React.createClass({
 	},
 	enterCommand: function(e) {
 		e.preventDefault();	
-		var pattern = /left|right|forward/;
+		var pattern = /left|right|forward|brake|reverse/;
 		var userCommands = this.state.userCommands;
 		if(this.state.command.match(pattern)) {
 			socket.emit('direction', {direction: this.state.command});
