@@ -19,18 +19,20 @@ socket.on('connect', function() {
 		// });
 		var motorRight = new j5.Motor({
 			pins: {
-				pwm: 5,
-				dir: 4
+				pwm: 3,
+				dir: 22,
+				cdir: 23
 			},
-			invertPWM: true
+			invertPWM: false
 		});
 
 		var motorLeft = new j5.Motor({
 			pins: {
-				pwm: 3,
-				dir: 2
+				pwm: 2,
+				dir: 24,
+				cdir: 25
 			},
-			invertPWM: true
+			invertPWM: false
 		});
 
 		// var leds = new j5.Led(6);
